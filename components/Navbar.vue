@@ -26,7 +26,7 @@
                   </v-list>
                 </v-tab>
                 <v-tab link to="/city" active-class="v-tab-active">О городе</v-tab>
-                <v-tab link to="/places" active-class="v-tab-active">Путеводитель</v-tab>
+                <v-tab link to="/visitPlace" active-class="v-tab-active">Путеводитель</v-tab>
                 <v-tab link to="/events" active-class="v-tab-active">Афиша</v-tab>
                 <v-tab link to="/blogs" active-class="v-tab-active">Блог</v-tab>
                 <v-tab link to="/routes" active-class="v-tab-active">Маршруты</v-tab>

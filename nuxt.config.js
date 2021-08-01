@@ -20,13 +20,18 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {rel:"stylesheet", href:"https://pro.fontawesome.com/releases/v5.10.0/css/all.css",
         integrity:"sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p",crossorigin:"anonymous"
-      }
+      },
+
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+      '~/assets/frontend.scss'
   ],
+
+
+
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -43,7 +48,29 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    'nuxt-i18n',
+    '@nuxtjs/axios'
   ],
+  i18n: {
+    locales: ['en', 'ru', 'kz'],
+    defaultLocale: "en",
+    vueI18n: {
+      fallbackLocale: "en",
+      messages: {
+        en:require("./static/en.json"),
+        ru:require("./static/ru.json"),
+        kz:require("./static/kz.json"),
+      },
+      vuex: { moduleName: 'i18n', syncLocale: true, syncMessages: false, syncRouteParams: true }
+    }
+  },
+
+  axios: {
+    // See https://github.com/nuxt-community/axios-module#options
+    baseURL: "http://backend.visit-shymkent/api/",
+    credentials: false,
+    proxyHeaders: false
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -66,5 +93,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+
   }
 }

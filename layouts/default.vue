@@ -2,10 +2,10 @@
   <section style="overflow: hidden">
     <v-app>
       <Navbar/>
-      <v-main>
+      <v-main class="mt-10">
         <Nuxt/>
-
       </v-main>
+      <Footer/>
 
     </v-app>
   </section>
@@ -15,8 +15,9 @@
 
 <script>
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 export default {
-  components: {Navbar},
+  components: {Footer, Navbar},
   data () {
     return {
       clipped: false,

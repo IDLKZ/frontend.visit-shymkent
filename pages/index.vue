@@ -1,5 +1,7 @@
 <template>
-  <section class="ma-0">
+  <section class="ma-0"
+  >
+<!--    Слайдер -->
     <v-container fluid class="pa-0">
       <v-carousel
         cycle
@@ -7,59 +9,62 @@
         hide-delimiter-background
         show-arrows-on-hover
       >
-        <v-carousel-item
-          v-for="(slide, i) in 2"
+        <v-carousel-item v-if="sliders.length > 0"
+          v-for="(slide, i) in sliders"
           :key="i"
-          src="https://i.pinimg.com/originals/71/9b/e8/719be89efa6a548253b4d3c7e9bfa6b1.jpg"
+          :src=getImages(slide.image)
         >
           <v-container style="height:100%; width:100vw"  class="pl-md-10 pl-3  d-flex align-center">
             <div>
               <p class="text-md-h2 text-h5 font-weight-bold white--text mb-md-4 mb-4">
-                Скоро здесь будет текст!
+                {{slide["title_"+$i18n.locale]}}
               </p>
 
               <p class="text-md-h5 text-subtitle-1 font-weight-bold white--text mb-md-10 mb-4">
-                Скоро здесь будет текст! Скоро здесь будет текст!
+                {{slide["description_"+$i18n.locale]}}
               </p>
               <v-btn color="red darken-1" class="white--text font-weight-bold"
-              large
+                     :href="slide['link']"
+                     large
               >
-                Узнать
+                {{slide["button_"+$i18n.locale]}}
               </v-btn>
             </div>
 
           </v-container>
 
         </v-carousel-item>
+
       </v-carousel>
 
     </v-container>
+<!-- Конец слайдера -->
 
 
-    <v-container class="mt-md-15 py-md-10">
+    <!--    Начало путеводителя-->
+    <v-container class="mt-md-5 py-md-5">
         <v-row>
-          <v-col md="9" cols="12" class="d-flex">
-              <v-sheet class="d-flex justify-center icon-section" rounded color="red darken-1" height="75" width="75">
-                <v-icon color="white" size="50">
+          <v-col md="9" cols="12" class="d-flex align-center">
+              <v-sheet class="icon-section d-flex justify-center" rounded>
+                <v-icon class="my-icon" color="white">
                   far fa-compass
                 </v-icon>
               </v-sheet>
-              <div class="ml-4">
-                <p class="text-md-h4 text-h5  red--text text--darken-1 mb-0">
-                  Путеводитель
-                </p>
-                <p class="text-h6 font-weight-light">
-                  Откройте для себя красивейшие места любимого Шымкента
-                </p>
+              <div class="pl-2 d-flex align-center">
+                <div>
+                  <p class="icon-title">
+                    {{$t("place_title")}}
+                  </p>
+                  <p class="icon-subtitle">
+                    {{$t("place_subtitle")}}
+                  </p>
+                </div>
+
               </div>
           </v-col>
 
           <v-col md="3" cols="12" class="d-none d-sm-block text-right">
-            Сотни
-            <br>
-            интереснейших мест
-            <br>
-            города
+            {{$t("place_right")}}
           </v-col>
         </v-row>
         <v-row>
@@ -78,9 +83,9 @@
             >
               <v-img
                 src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-                class="white--text align-end"
+                class="white--text align-end place-img"
               >
-                <v-card-title class="text-md-h6 text-subtitle-1 font-weight-bold">Top western road trips</v-card-title>
+                <v-card-title class="text-md-h6 text-subtitle-1 font-weight-bold place-title">Top western road trips</v-card-title>
               </v-img>
 
             </v-card>
@@ -90,30 +95,39 @@
 
         </v-row>
     </v-container>
+     <!--Конец путеводителя-->
 
+<!--Календарь событий-->
     <v-container class="mt-md-15 py-md-10">
       <v-row>
-        <v-col md="6" cols="12" class="d-flex">
-          <v-sheet class="d-flex justify-center icon-section" rounded color="red darken-1" height="75" width="75">
-            <v-icon color="white" size="50">
-              far fa-calendar-check
-            </v-icon>
-          </v-sheet>
-          <div class="ml-4">
-            <p class="text-md-h4 text-h6 font-weight-medium red--text text--darken-1 mb-0">
-              Календарь событий
-            </p>
-            <p class="text-h6 font-weight-light">
-              Следите за событиями любимого города
-            </p>
-          </div>
-        </v-col>
+        <v-col md="12" cols="12" class="d-flex align-center">
+          <div class="d-flex align-center">
+            <v-sheet class="icon-section d-flex justify-center" rounded>
+              <v-icon class="my-icon" color="white">
+                far fa-calendar-check
+              </v-icon>
+            </v-sheet>
+            <div class="ml-4 d-flex align-center">
+              <div>
+                <p class="icon-title">
+                  Календарь событий
+                </p>
+                <p class="icon-subtitle">
+                  Следите за событиями любимого города
+                </p>
+              </div>
 
-        <v-col md="6" cols="12" class="d-none d-sm-block">
-          <div class="line-block"></div>
+            </div>
+          </div>
+            <div class="line-block"></div>
+
         </v-col>
       </v-row>
     </v-container>
+
+<!--    Конец календарь событий-->
+
+<!--Карты с календарем событий-->
     <section class="calendar-event d-flex align-center">
       <v-container>
         <v-row>
@@ -150,60 +164,87 @@
 
     <v-container class="my-5">
       <v-row>
-        <v-col cols="12" lg="3" sm="6" v-for="i in 4" >
+        <v-col cols="6" lg="3" sm="6" v-for="i in 4" >
         <v-card
-          class="mx-auto my-12 event-card"
+          class="mx-auto my-5 event-card"
         >
           <v-img
-            class="card-img"
+            class="event-img"
             src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
-          ></v-img>
+            gradient="rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)"
 
-          <v-card-title class="black--text">
+          >
+
+              <template v-if="(i%2==0)">
+                <div class="py-2 d-flex justify-space-around">
+                <div>
+                  <small class="white--text">Дата</small>
+                  <p class="event-time">
+                    02.07.2021 -
+                  </p>
+                  <p class="event-time">
+                    10.07.2021
+                  </p>
+                </div>
+                <div>
+                  <small class="white--text">Время</small>
+                  <p class="event-time">
+                    9:00
+                  </p>
+                </div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="py-2 d-flex">
+                <div class="px-5 event-everyday">
+                  <p class="event-time">
+                    Ежедневное посещение
+                  </p>
+                </div>
+                </div>
+              </template>
+
+
+
+
+          </v-img>
+
+          <v-card-title class="black--text event-title">
             Ярмарка продуктовая
           </v-card-title>
 
-          <v-card-text>
-            <v-row
-              align="center"
-              class="mx-0"
-            >
-
-            </v-row>
-
-            <div class="mt-4  text-subtitle-1">
-
+          <v-card-text class="event-location">
+            <div class="text-subtitle-1">
               <div class="d-flex">
                 <div class="pr-1">
                   <v-icon color="red accent-4" size="18">
                     fas fa-map-marker-alt
                   </v-icon>
                 </div>
-                <div>
+                <div class="event-subtitle">
                   <span class="text-body-2 black--text font-weight-bold ">
                     Выставочный центр «Көрме»
                   </span>
                   <br>
-                  <small style="font-size: 12px">
+                  <small>
                     проспект Нурсултана Назарбаева, 12
                   </small>
                 </div>
               </div>
-
             </div>
 
           </v-card-text>
 
-          <v-card-text class="text-caption black--text" style="min-height: 150px">
+          <v-card-text class="text-caption black--text event-description">
             Уважаемые жители и гости города!!! Приглашаем вас на ярмарку, которая пройдет в выставочном центре. Тип питания, у вас есть возможность приобрести фрукты по низкой цене. Ждем вас! # Тәуелсіздік # Тә...
           </v-card-text>
 
-          <v-card-actions class="d-flex justify-md-space-between">
-            <v-btn color="red accent-4" class="white--text text-caption text-capitalize px-8">
-              Купить
+          <v-card-actions class="event-action">
+            <v-btn  v-if="i%2==0" color="red accent-4"  class="white--text text-caption text-capitalize red-button">
+              Купить билеты
             </v-btn>
 
-            <v-btn color="red accent-4" class="white--text text-caption text-capitalize px-8">
+            <v-btn color="red accent-4" class="white--text text-caption text-capitalize red-button">
               Подробнее
             </v-btn>
           </v-card-actions>
@@ -214,9 +255,8 @@
       <v-btn
         outlined
         rounded
-        color="red accent-4"
         x-large
-        class="text-caption text-none"
+        class="text-caption text-none red-button"
       >
         Загрузить еще....
       </v-btn>
@@ -225,26 +265,229 @@
       </v-row>
     </v-container>
 
-    <section style="background-color:#C42313;">
+<!--    Конец карт с календарем-->
+
+
+    <section style="background-color:#C42313;padding: 50px 0 50px 0">
       <v-container>
         <v-row>
-          <v-col cols="12" class="d-flex">
-            <v-sheet class="d-flex justify-center icon-section" rounded color="white" height="75" width="75">
-            <v-icon color="red" size="50">
+          <v-col md="12" cols="12" class="d-flex align-center">
+            <v-sheet class="icon-section d-flex justify-center" color="white" rounded>
+              <v-icon class="my-icon" color="#C42313">
                 far fa-sun
               </v-icon>
             </v-sheet>
-            <div class="ml-4">
-              <p class="text-md-h4 text-h6 font-weight-medium white--text mb-0">
-                Календарь событий
-              </p>
-              <p class="text-h6 font-weight-light white--text">
-                Следите за событиями любимого города
-              </p>
+            <div class="ml-4 d-flex align-center">
+              <div>
+                <p class="icon-title white--text">
+                  Запланировать поездку
+                </p>
+                <p class="icon-subtitle white--text">
+                  Билеты и проживание
+                </p>
+              </div>
             </div>
           </v-col>
+        </v-row>
+        <v-row class="mt-5">
+          <v-tabs background-color="#C42313"  v-model="tab">
+            <v-tab   class="schedule" active-class="schedule-active" href="#tab1">
+              <v-icon class="schedule-icon mr-2">fas fa-plane</v-icon>Авиабилеты
+            </v-tab>
+            <v-tab  class="schedule" active-class="schedule-active" href="#tab2">
+              <v-icon class="schedule-icon mr-2">fas fa-train</v-icon>Ж/Д
+            </v-tab>
+            <v-tab  class="schedule" active-class="schedule-active" href="#tab3">
+              <v-icon class="schedule-icon mr-2">fas fa-hotel</v-icon>Отели
+            </v-tab>
+            <v-tab  class="schedule" active-class="schedule-active" href="#tab4">
+              <v-icon class="schedule-icon mr-2">fas fa-key</v-icon>Квартиры
+            </v-tab>
+          </v-tabs>
 
+          <v-tabs-items class="py-5 px-5" style="width: 100%" v-model="tab">
+            <v-tab-item value="tab1">
+              <v-form  class="d-flex align-center">
+                <v-row>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Откуда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Куда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Дата вылета"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Обратно"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Пассажиры"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="3" sm="6" cols="12" >
+                      <v-btn class="my-btn">
+                        Найти
+                      </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
 
+            </v-tab-item>
+            <v-tab-item value="tab2">
+              <v-form  class="d-flex align-center">
+                <v-row>
+                  <v-col  lg="3" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Откуда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="3" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Куда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Дата вылета"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Обратно"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-btn class="my-btn">
+                      Найти
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-tab-item>
+            <v-tab-item value="tab3">
+              <v-form  class="d-flex align-center">
+                <v-row>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Откуда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Куда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Дата вылета"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="4" md="4" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Обратно"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-btn class="my-btn">
+                      Найти
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-tab-item>
+            <v-tab-item value="tab4">
+              <v-form  class="d-flex align-center">
+                <v-row>
+                  <v-col  lg="3" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Откуда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Куда"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Дата вылета"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="3" md="3" sm="6" cols="12" >
+                    <v-text-field
+                      outlined
+                      label="Обратно"
+                      hide-details="false"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col  lg="2" md="2" sm="6" cols="12" >
+                    <v-btn class="my-btn">
+                      Найти
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-tab-item>
+          </v-tabs-items>
 
         </v-row>
       </v-container>
@@ -252,25 +495,27 @@
 
     <v-container class="mt-md-15 py-md-10">
       <v-row>
-        <v-col md="6" cols="12" class="d-flex">
-          <v-sheet class="d-flex justify-center icon-section" rounded color="red darken-1" height="75" width="75">
-            <v-icon color="white" size="50">
-              fas fa-map-marker-alt
-            </v-icon>
-          </v-sheet>
-          <div class="ml-4">
-            <p class="text-md-h4 text-h6 font-weight-medium red--text text--darken-1 mb-0">
-              Маршруты
-            </p>
-            <p class="text-h6 font-weight-light">
-              Не знаете, что посетить?
-            </p>
-          </div>
-        </v-col>
+        <v-col md="12" cols="12" class="d-flex align-center">
+          <div class="d-flex align-center">
+            <v-sheet class="icon-section d-flex justify-center" rounded>
+              <v-icon class="my-icon" color="white">
+                far fa-calendar-check
+              </v-icon>
+            </v-sheet>
+            <div class="ml-4 d-flex align-center">
+              <div>
+                <p class="icon-title">
+                  Календарь событий
+                </p>
+                <p class="icon-subtitle">
+                  Следите за событиями любимого города
+                </p>
+              </div>
 
-        <v-col md="6" cols="12" class="d-none d-sm-block">
-          <div class="line-block">
+            </div>
           </div>
+          <div class="line-block"></div>
+
         </v-col>
       </v-row>
       <v-row>
@@ -308,7 +553,7 @@
             rounded
             color="red accent-4"
             x-large
-            class="text-caption text-none"
+            class="text-caption text-none red-button"
           >
             Смотреть все категории
           </v-btn>
@@ -317,66 +562,147 @@
     </v-container>
 
 
-    <v-container class="mt-md-15 py-md-10">
+    <v-container class="mt-md-5 py-md-5">
       <v-row>
-        <v-col md="6" cols="12" class="d-flex">
-          <v-sheet class="d-flex justify-center icon-section" rounded color="red darken-1" height="75" width="75">
-            <v-icon color="white" size="50">
-              fas fa-shopping-cart
-            </v-icon>
-          </v-sheet>
-          <div class="ml-4">
-            <p class="text-md-h4 text-h6 font-weight-medium red--text text--darken-1 mb-0">
-              Сувениры
-            </p>
-            <p class="text-h6 font-weight-light">
-              Оставьте себе на память кусочек Шымкента
-            </p>
+        <v-col md="12" cols="12" class="d-flex align-center">
+          <div class="d-flex align-center">
+            <v-sheet class="icon-section d-flex justify-center" rounded>
+              <v-icon class="my-icon" color="white">
+                far fa-calendar-check
+              </v-icon>
+            </v-sheet>
+            <div class="ml-4 d-flex align-center">
+              <div>
+                <p class="icon-title">
+                  Календарь событий
+                </p>
+                <p class="icon-subtitle">
+                  Следите за событиями любимого города
+                </p>
+              </div>
+
+            </div>
           </div>
+          <div class="line-block"></div>
+
         </v-col>
       </v-row>
       <v-row class="mt-5">
-        <v-col lg="3" md="4" sm="6" cols="6" v-for="i in 4" class="px-2">
-          <v-card
-            class="mx-auto my-12 souvenir-card"
-          >
+        <v-col lg="3" md="4" sm="12" xs="6" cols="6" v-for="i in 4" class="px-2 souvenir-column">
+          <v-card class="mx-auto my-2 souvenir-card">
             <v-img
               class="souvenir-img"
               src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
             ></v-img>
+            <div>
+              <v-card-title class="black--text souvenir-title pa-2">
+                «Подражание лучшим...»
+              </v-card-title>
+              <v-card-text class="text-caption black--text souvenir-subtitle pa-2">
+                Полностью завершенное графическое произведение. Одним из лучших художников мирового уровня является копия произведения И. Крамского «Белгісіз» (Неизвестная). Автор: Абдураимова Санобар Алимжановна             </v-card-text>
+              <v-card-actions class=" pa-2">
+                <div class="souvenir-action">
+                  <div class="souvenir-price">
+                    <p class="text-subtitle-1 font-weight-bold ma-0 ml-2 souvenir-price">
+                      <v-icon size="12" color="white" class="souvenir-icon pa-1 mr-1">
+                        fas fa-tags
+                      </v-icon>
+                      700000 ТГ
+                    </p>
+                  </div>
+                  <div class="souvenir-button">
+                    <v-btn color="red accent-4" class="white--text text-caption text-capitalize souvenir-button align-items-left">
+                      Подробнее
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-actions>
+            </div>
 
-            <v-card-title class="black--text souvenir-title">
-              «Подражание лучшим...»
-            </v-card-title>
 
-
-            <v-card-text class="text-caption black--text souvenir-subtitle">
-              Полностью завершенное графическое произведение. Одним из лучших художников мирового уровня является копия произведения И. Крамского «Белгісіз» (Неизвестная). Автор: Абдураимова Санобар Алимжановна             </v-card-text>
-
-            <v-card-actions class="souvenir-action">
-              <span class="d-flex">
-                <v-sheet class="pa-1 souvenir-sheet">
-                  <v-icon size="15" color="white" class="souvenir-icon">
-                    fas fa-tags
-                  </v-icon>
-                </v-sheet>
-                <p class="text-subtitle-1 font-weight-bold text-uppercase ma-0 ml-2 souvenir-price">
-                  700000 Тг
-                </p>
-              </span>
-
-              <v-btn color="red accent-4" class="white--text text-caption text-capitalize souvenir-button">
-                Подробнее
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-col>
 
+
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <v-btn
+            outlined
+            rounded
+            color="red accent-4"
+            x-large
+            class="text-caption text-none red-button"
+          >
+            Перейти в магазин
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
 
 
+    <v-container class="mt-md-15 py-md-10">
+      <v-row>
+        <v-col md="12" cols="12" class="d-flex align-center">
+          <div class="d-flex align-center">
+            <v-sheet class="icon-section d-flex justify-center" rounded>
+              <v-icon class="my-icon" color="white">
+                far fa-calendar-check
+              </v-icon>
+            </v-sheet>
+            <div class="ml-4 d-flex align-center">
+              <div>
+                <p class="icon-title">
+                  Календарь событий
+                </p>
+                <p class="icon-subtitle">
+                  Следите за событиями любимого города
+                </p>
+              </div>
 
+            </div>
+          </div>
+          <div class="line-block"></div>
+
+        </v-col>
+
+
+      </v-row>
+      <v-row class="mt-5">
+        <v-col lg="3" md="4" sm="6" cols="6" v-for="i in 4" class="px-2 souvenir-column">
+          <v-card class="mx-auto my-2 news-card">
+            <v-img
+              class="news-img"
+              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            ></v-img>
+            <div>
+              <v-card-title class="black--text news-title pa-2">
+                НА РАЗВИТИЕ ВОЕННО-СПОРТИВНОЙ БАЗЫ «БЕРКУТ» В ГОРОДЕ ШЫМКЕНТ ПЛАНИРУЕТСЯ ПРИВЛЕЧЕНИЕ ИНВЕСТИЦИЙ
+              </v-card-title>
+            </div>
+
+
+          </v-card>
+        </v-col>
+
+
+      </v-row>
+
+      <v-row>
+        <v-col cols="12" class="text-center">
+          <v-btn
+            outlined
+            rounded
+            color="red accent-4"
+            x-large
+            class="text-caption text-none red-button"
+          >
+            Ко всем новостям
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
   </section>
 </template>
 
@@ -391,6 +717,10 @@ export default {
   },
   data () {
     return {
+
+      tab:null,
+
+
       colors: [
         'indigo',
         'warning',
@@ -405,113 +735,32 @@ export default {
         'Fourth',
         'Fifth',
       ],
+      sliders:[]
     }
   },
+  methods:{
+    getImages(data){
+      console.log(this.$store.state.image.image);
+      return this.$store.state.image.image + data ;
+    }
+
+  },
+  async asyncData({$axios}) {
+    let sliders = [];
+    try{
+      await $axios.$get("/sliders").then((e)=>{e.length > 0 ? sliders = e : null});
+    }
+    catch (e) {
+      console.log(e);
+    }
+    return {sliders:sliders}
+  }
 }
 </script>
 
 <style lang="scss">
-//Hello
-$mainColor: #C42313;
-$grayColor:#cbcbcb;
-@mixin chart-line{
-  border: 1px dashed #cbcbcb;
-}
 
 
-.calendar-event{
-  min-height: 100px;
-  background: #C42313;
-}
-
-.active-button{
-
-}
-.day-button-group{
-  .day-button{
-    border-right: 1px solid white!important;
-    color:$grayColor;
-    padding-right: 5px;
-    @media screen and (max-width: 768px) {
-      border-right: none;
-    }
-    :hover{
-      color: white;
-      background: transparent!important;
-    }
-  }
-  :nth-last-child(1){
-    border-right: none!important;
-  }
-}
-
-.place-card{
-
-  img{
-    min-height: 200px;
-    @media screen and (max-width: 400px){
-      min-height: 160px;
-    }
-  }
-  @media screen and (max-width: 400px){
-    font-size: 10px;
-  }
-
-}
-
-.event-card{
-  elevation: 0;
-  box-shadow: none!important;
-  .card-img{
-    height: 270px;
-    border-radius: 5px;
-  }
-}
-
-.routes-card{
-  padding:0;
-  border:1px solid $grayColor;
-  border-radius: 8px;
-  .routes-img{
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
-  }
-
-  .routes-text{
-    @media screen {
-      padding: 10px 0 10px 0;
-    }
-  }
-
-  .routes-list-item{
-    @media screen and (max-width: 768px){
-      min-height: 0;
-    }
-
-  }
-
-}
-
-.line-block{
-  @include chart-line
-}
-
-.souvenir-card{
-  box-shadow: none!important;
-  .souvenir-img{
-    min-height: 250px;
-    @media screen and (max-width: 600px){
-      min-height: 150px;
-    }
-  }
-  .souvenir-action{
-    .souvenir-icon{
-      background: $mainColor;
-    }
-  }
-
-
-}
 
 
 </style>
