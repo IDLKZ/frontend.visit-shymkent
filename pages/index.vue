@@ -67,10 +67,10 @@
             {{$t("place_right")}}
           </v-col>
         </v-row>
-        <v-row>
+        <v-row v-if="categoryplace.length > 0">
           <v-col
-            v-for="i in 12"
-            :key="i"
+            v-for="(category,index) in categoryplace"
+            :key="index"
             lg="3"
             md="4"
             sm="6"
@@ -82,10 +82,13 @@
               to="/"
             >
               <v-img
-                src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+                :src="getImages(category.image)"
                 class="white--text align-end place-img"
+                gradient="rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)"
               >
-                <v-card-title class="text-md-h6 text-subtitle-1 font-weight-bold place-title">Top western road trips</v-card-title>
+                <v-card-title class="text-md-h6 text-subtitle-1 font-weight-bold place-title">
+                  {{category["title_"+$i18n.locale]}}
+                </v-card-title>
               </v-img>
 
             </v-card>
@@ -110,10 +113,10 @@
             <div class="ml-4 d-flex align-center">
               <div>
                 <p class="icon-title">
-                  Календарь событий
+                  {{$t("events_title")}}
                 </p>
                 <p class="icon-subtitle">
-                  Следите за событиями любимого города
+                  {{$t("events_subtitle")}}
                 </p>
               </div>
 
@@ -162,90 +165,85 @@
     </section>
 
 
-    <v-container class="my-5">
+    <v-container class="my-5" v-if="events.length > 0">
       <v-row>
-        <v-col cols="6" lg="3" sm="6" v-for="i in 4" >
+        <v-col cols="6" lg="3" sm="6" v-for="(event,index) in events"  :key="index">
         <v-card
           class="mx-auto my-5 event-card"
         >
           <v-img
             class="event-img"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            :src="getImages(event.image)"
             gradient="rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)"
 
           >
 
-              <template v-if="(i%2==0)">
+              <template v-if="event.workdays.length>0">
                 <div class="py-2 d-flex justify-space-around">
                 <div>
-                  <small class="white--text">Дата</small>
-                  <p class="event-time">
-                    02.07.2021 -
+                  <small class="white--text" v-for="(day,index) in event.workdays" :key="index">
+                    {{day.weekday["title_" + $i18n.locale]}} <br>
+                  </small><br>
+                  <p class="event-time"  v-for="(day,index) in event.workdays" :key="index" v-if="day.date_start">
+                    {{day.date_start}} -
                   </p>
-                  <p class="event-time">
-                    10.07.2021
+                  <p class="event-time" v-for="(day,index) in event.workdays" :key="index" v-if="day.date_end">
+                    {{day.date_end}}
                   </p>
                 </div>
                 <div>
                   <small class="white--text">Время</small>
-                  <p class="event-time">
-                    9:00
-                  </p>
+                  <br>
+                  <template v-for="(day,index) in event.workdays">
+                    <small class="white--text" :key="index" v-if="day.time_start">
+                      {{day.time_start}} -
+                    </small>
+
+                    <small class="white--text" :key="index"  v-if="day.time_end">
+                      {{day.time_end}}
+                    </small>
+                    <br>
+                  </template>
+
                 </div>
                 </div>
               </template>
-              <template v-else>
-                <div class="py-2 d-flex">
-                <div class="px-5 event-everyday">
-                  <p class="event-time">
-                    Ежедневное посещение
-                  </p>
-                </div>
-                </div>
-              </template>
-
-
-
-
           </v-img>
 
           <v-card-title class="black--text event-title">
-            Ярмарка продуктовая
+            {{event["title_"+$i18n.locale]}}
           </v-card-title>
 
-          <v-card-text class="event-location">
+          <v-card-text class="event-location pb-0" >
             <div class="text-subtitle-1">
-              <div class="d-flex">
-                <div class="pr-1">
+              <div class="d-flex pb-0 align-items-center" >
+                <div class="pr-1" v-if="event.address">
                   <v-icon color="red accent-4" size="18">
                     fas fa-map-marker-alt
                   </v-icon>
                 </div>
-                <div class="event-subtitle">
+                <div class="event-subtitle" v-if="event.address">
                   <span class="text-body-2 black--text font-weight-bold ">
-                    Выставочный центр «Көрме»
+                    {{event.address}}
                   </span>
                   <br>
-                  <small>
-                    проспект Нурсултана Назарбаева, 12
-                  </small>
                 </div>
               </div>
             </div>
 
           </v-card-text>
 
-          <v-card-text class="text-caption black--text event-description">
-            Уважаемые жители и гости города!!! Приглашаем вас на ярмарку, которая пройдет в выставочном центре. Тип питания, у вас есть возможность приобрести фрукты по низкой цене. Ждем вас! # Тәуелсіздік # Тә...
+          <v-card-text class="text-caption black--text event-description" v-html="(event['description_' + $i18n.locale]).slice(0,300)">
+
           </v-card-text>
 
           <v-card-actions class="event-action">
-            <v-btn  v-if="i%2==0" color="red accent-4"  class="white--text text-caption text-capitalize red-button">
-              Купить билеты
+            <v-btn  v-if="event.eventum" color="red accent-4"  class="white--text text-caption text-capitalize red-button">
+              {{$t("buy")}}
             </v-btn>
 
             <v-btn color="red accent-4" class="white--text text-caption text-capitalize red-button">
-              Подробнее
+              {{$t("more_info")}}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -499,16 +497,16 @@
           <div class="d-flex align-center">
             <v-sheet class="icon-section d-flex justify-center" rounded>
               <v-icon class="my-icon" color="white">
-                far fa-calendar-check
+                far fa-map-marker-alt
               </v-icon>
             </v-sheet>
             <div class="ml-4 d-flex align-center">
               <div>
                 <p class="icon-title">
-                  Календарь событий
+                 {{$t("routes_title")}}
                 </p>
                 <p class="icon-subtitle">
-                  Следите за событиями любимого города
+                  {{$t("routes_subtitle")}}
                 </p>
               </div>
 
@@ -735,7 +733,9 @@ export default {
         'Fourth',
         'Fifth',
       ],
-      sliders:[]
+      sliders:[],
+      categoryplace:[],
+      events:[]
     }
   },
   methods:{
@@ -746,14 +746,16 @@ export default {
 
   },
   async asyncData({$axios}) {
-    let sliders = [];
+    let sliders,categoryplace,events = [];
     try{
       await $axios.$get("/sliders").then((e)=>{e.length > 0 ? sliders = e : null});
+      await $axios.$get("/categoriesofthe-places").then((e)=>{e.length > 0 ? categoryplace = e : null});
+      await $axios.$get("/events").then((e)=>{e.length > 0 ? events = e : null});
     }
     catch (e) {
       console.log(e);
     }
-    return {sliders:sliders}
+    return {sliders,categoryplace,events}
   }
 }
 </script>
