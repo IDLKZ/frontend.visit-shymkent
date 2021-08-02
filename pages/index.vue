@@ -517,20 +517,19 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6" v-for="i in 2" :key="i">
+
+        <v-col cols="12" md="6" v-for="route in routes" :key="route.id">
           <div class="d-flex border rounded-lg border routes-card">
             <div class="d-flex" style="width: 40%">
-              <v-img class="routes-img" width="100%"  src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"></v-img>
+              <v-img class="routes-img" width="100%"  :src="getImages(route.image)"></v-img>
             </div>
             <div class="px-4 py-md-4 routes-text">
-              <p class="text-subtitle-1 text-md-h6">БИЗНЕС-ТУР</p>
+              <p class="text-subtitle-1 text-md-h6">{{ route['title_' + $i18n.locale] }}</p>
               <v-list class="text-caption text-md-body-1 routes-list">
-                <v-list-item class="px-0 routes-list-item">
-                  08:00 - Сбор
-                </v-list-item>
-                <v-list-item class="px-0 routes-list-item">
-                  09:00-10:00 Завтрак в национальном ресторане казахской кухни «Sandyq»
-                </v-list-item>
+                <v-list-item class="px-0 routes-list-item" v-html="truncate(route['description_' + $i18n.locale], 100)"></v-list-item>
+<!--                <v-list-item class="px-0 routes-list-item">-->
+<!--                  09:00-10:00 Завтрак в национальном ресторане казахской кухни «Sandyq»-->
+<!--                </v-list-item>-->
 
               </v-list>
               <v-btn color="red accent-4" class="white--text text-caption text-capitalize px-8 mt-2">
@@ -572,10 +571,10 @@
             <div class="ml-4 d-flex align-center">
               <div>
                 <p class="icon-title">
-                  Календарь событий
+                  Сувениры
                 </p>
                 <p class="icon-subtitle">
-                  Следите за событиями любимого города
+                  Оставьте себе на память кусочек Шымкента
                 </p>
               </div>
 
@@ -586,18 +585,17 @@
         </v-col>
       </v-row>
       <v-row class="mt-5">
-        <v-col lg="3" md="4" sm="12" xs="6" cols="6" v-for="i in 4" class="px-2 souvenir-column">
+        <v-col lg="3" md="4" sm="12" xs="6" cols="6" v-for="souvenir in souvenirs" :key="souvenir.id" class="px-2 souvenir-column">
           <v-card class="mx-auto my-2 souvenir-card">
             <v-img
               class="souvenir-img"
-              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+              :src="getImages(souvenir.image)"
             ></v-img>
             <div>
               <v-card-title class="black--text souvenir-title pa-2">
-                «Подражание лучшим...»
+                "{{souvenir['title_'+ $i18n.locale]}}"
               </v-card-title>
-              <v-card-text class="text-caption black--text souvenir-subtitle pa-2">
-                Полностью завершенное графическое произведение. Одним из лучших художников мирового уровня является копия произведения И. Крамского «Белгісіз» (Неизвестная). Автор: Абдураимова Санобар Алимжановна             </v-card-text>
+              <v-card-text class="text-caption black--text souvenir-subtitle pa-2" v-html="truncate(souvenir['description_' + $i18n.locale], 75)"></v-card-text>
               <v-card-actions class=" pa-2">
                 <div class="souvenir-action">
                   <div class="souvenir-price">
@@ -605,7 +603,7 @@
                       <v-icon size="12" color="white" class="souvenir-icon pa-1 mr-1">
                         fas fa-tags
                       </v-icon>
-                      700000 ТГ
+                      {{ souvenir.price }} ТГ
                     </p>
                   </div>
                   <div class="souvenir-button">
@@ -652,10 +650,10 @@
             <div class="ml-4 d-flex align-center">
               <div>
                 <p class="icon-title">
-                  Календарь событий
+                  Новости
                 </p>
                 <p class="icon-subtitle">
-                  Следите за событиями любимого города
+                  Что происходит
                 </p>
               </div>
 
@@ -668,16 +666,14 @@
 
       </v-row>
       <v-row class="mt-5">
-        <v-col lg="3" md="4" sm="6" cols="6" v-for="i in 4" class="px-2 souvenir-column">
+        <v-col lg="3" md="4" sm="6" cols="6" v-for="blog in blogs" :key="blog.id" class="px-2 souvenir-column">
           <v-card class="mx-auto my-2 news-card">
             <v-img
               class="news-img"
-              src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+              :src="getImages(blog.image)"
             ></v-img>
             <div>
-              <v-card-title class="black--text news-title pa-2">
-                НА РАЗВИТИЕ ВОЕННО-СПОРТИВНОЙ БАЗЫ «БЕРКУТ» В ГОРОДЕ ШЫМКЕНТ ПЛАНИРУЕТСЯ ПРИВЛЕЧЕНИЕ ИНВЕСТИЦИЙ
-              </v-card-title>
+              <v-card-title class="black--text news-title pa-2" v-html="truncate(blog['description_'+$i18n.locale], 50)"></v-card-title>
             </div>
 
 
@@ -715,10 +711,7 @@ export default {
   },
   data () {
     return {
-
       tab:null,
-
-
       colors: [
         'indigo',
         'warning',
@@ -735,27 +728,36 @@ export default {
       ],
       sliders:[],
       categoryplace:[],
-      events:[]
+      events:[],
+      routes: [],
+      souvenirs: [],
+      blogs: []
     }
   },
   methods:{
     getImages(data){
       console.log(this.$store.state.image.image);
       return this.$store.state.image.image + data ;
+    },
+    truncate(string, value) {
+      return string.substring(0, value) + '…';
     }
 
   },
   async asyncData({$axios}) {
-    let sliders,categoryplace,events = [];
+    let sliders,categoryplace,events,routes,souvenirs,blogs = [];
     try{
       await $axios.$get("/sliders").then((e)=>{e.length > 0 ? sliders = e : null});
       await $axios.$get("/categoriesofthe-places").then((e)=>{e.length > 0 ? categoryplace = e : null});
       await $axios.$get("/events").then((e)=>{e.length > 0 ? events = e : null});
+      await $axios.$get("/routes").then((e)=>{e.length > 0 ? routes = e : null});
+      await $axios.$get("/souvenirs").then((e)=>{e.length > 0 ? souvenirs = e : null});
+      await $axios.$get("/news").then((e)=>{e.length > 0 ? blogs = e : null});
     }
     catch (e) {
       console.log(e);
     }
-    return {sliders,categoryplace,events}
+    return {sliders,categoryplace,events,routes,souvenirs,blogs}
   }
 }
 </script>

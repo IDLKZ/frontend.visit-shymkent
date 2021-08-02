@@ -9,7 +9,7 @@ export default {
     titleTemplate: '%s - frontend.shymkent-visit',
     title: 'frontend.shymkent-visit',
     htmlAttrs: {
-      lang: 'en'
+      lang: 'ru'
     },
     meta: [
       { charset: 'utf-8' },
@@ -35,6 +35,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    './plugins/truncate.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -53,9 +54,9 @@ export default {
   ],
   i18n: {
     locales: ['en', 'ru', 'kz'],
-    defaultLocale: "en",
+    defaultLocale: "ru",
     vueI18n: {
-      fallbackLocale: "en",
+      fallbackLocale: "ru",
       messages: {
         en:require("./static/en.json"),
         ru:require("./static/ru.json"),
