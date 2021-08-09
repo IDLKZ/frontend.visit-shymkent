@@ -40,6 +40,8 @@
       <v-row>
         <v-col md="8">
           <lingallery :iid.sync="currentId" :width="700" :height="400" :items=galleries />
+
+
         </v-col>
         <v-col md="4">
           <yandex-map :coords="coords"
@@ -47,15 +49,19 @@
                       style="width: 400px;height: 400px;"
                       map-type="map"
           >
-            <ymap-marker
-              marker-id="2"
-              marker-type="placemark"
-              :coords="placemarks"
-              :hint-content="place['title_'+$i18n.locale]"
-              :balloon="{header: 'header', body: 'body', footer: 'footer'}"
-              :icon="{color: 'green', glyph: 'cinema'}"
-              cluster-name="1"
-            ></ymap-marker>
+            <div v-for="(item,i) in placemarks">
+              <ymap-marker
+                :key="i"
+                :marker-id="i"
+                marker-type="placemark"
+                :coords="item"
+                :hint-content="place['title_'+$i18n.locale]"
+                :balloon="{header: 'header', body: 'body', footer: 'footer'}"
+                :icon="{color: 'green', glyph: 'cinema'}"
+                cluster-name="1"
+              ></ymap-marker>
+            </div>
+
           </yandex-map>
         </v-col>
       </v-row>
@@ -70,7 +76,6 @@ export default {
   components:{
     Lingallery
   },
-  name: "_alias",
   data() {
     return {
       items: [
@@ -97,8 +102,11 @@ export default {
     const alias = params.alias
     const place = await $axios.$get('/single-place/'+alias);
     let TIMA = JSON.parse(place.address_link)
-    const placemarks = [TIMA[0].lat, TIMA[0].lng];
-    // console.log(coords)
+    let placemarks = []
+    TIMA.forEach((item, i) => {
+      placemarks[i] = [item.lat, item.lng];
+    })
+
     if(place.galleries.length > 0){
       for(let i = 0; i < place.galleries.length; i++){
         galleries.push(
