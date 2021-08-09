@@ -60,7 +60,7 @@
             :slidesToShow="4"
             :focusOnSelect="true">
             <div v-for="i in 8" class="pa-2">
-              <v-img src="https://visit-shymkent.kz/land/images/about_slider/3.jpg"></v-img>
+              <v-img src="https://visit-shymkent.kz/land/images/about_slider/2.jpg"></v-img>
             </div>
 
           </VueSlickCarousel>

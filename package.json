@@ -16,7 +16,9 @@
     "nuxt": "^2.15.3",
     "nuxt-i18n": "^6.28.0",
     "style-loader": "^3.0.0",
-    "vue-slick-carousel": "^1.0.6"
+    "vue-product-zoomer": "^3.0.1",
+    "vue-slick-carousel": "^1.0.6",
+    "vue-yandex-maps": "^0.10.12"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.2.0",

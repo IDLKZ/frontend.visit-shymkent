@@ -2,41 +2,38 @@
 <section class="py-5">
   <v-container class="mt-md-5 py-md-5">
     <v-row>
-
       <div>
         <div>
           <v-breadcrumbs
             :items="items"
             divider="-"
           ></v-breadcrumbs>
-
         </div>
       </div>
     </v-row>
 
-
-
     <v-row>
-      <v-col md="6" cols="12" class="d-flex align-center">
-        <v-sheet class="icon-section d-flex justify-center" rounded>
-          <v-icon class="my-icon" color="white">
-            far fa-compass
-          </v-icon>
-        </v-sheet>
-        <div class="ml-4 d-flex align-center">
-          <div>
-            <p class="icon-title">
-              Путеводитель
-            </p>
-            <p class="icon-subtitle">
-              Откройте для себя красивейшие места любимого Шымкента
-            </p>
-          </div>
+      <v-col md="12" cols="12" class="d-flex align-center">
+        <div class="d-flex align-center">
+          <v-sheet class="icon-section d-flex justify-center" rounded>
+            <v-icon class="my-icon" color="white">
+              far fa-compass
+            </v-icon>
+          </v-sheet>
+          <div class="ml-4 d-flex align-center">
+            <div>
+              <p class="icon-title">
+                Путеводитель
+              </p>
+              <p class="icon-subtitle">
+                Откройте для себя красивейшие места любимого Шымкента
+              </p>
+            </div>
 
+          </div>
         </div>
-      </v-col>
-      <v-col md="6" cols="12" class="d-none d-sm-flex align-center">
-        <div class="line-block"></div>
+        <div class="line-block ml-md-10"></div>
+
       </v-col>
     </v-row>
 
@@ -119,7 +116,7 @@
     <v-col lg="8" md="8" sm="12" cols="12">
       <v-row>
         <v-col lg="6" md="12" sm="6" cols="6" v-for="(item,i) in places" :key="i">
-          <v-card
+          <v-card link :to="'/visit-place/'+item.alias"
             class="mx-auto my-md-6 my-sm-4 pb-5 visit-card" max-width="500">
             <div>
               <v-img
