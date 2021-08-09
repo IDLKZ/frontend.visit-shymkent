@@ -12,7 +12,18 @@ $grayColor:#cbcbcb;
     min-height: 56px!important;
   }
 }
-
+.border-bottom-line{
+  &:after {
+    content: "";
+    display: block;
+    height: 1px;
+    background-image: url("/line.png");
+    background-repeat: repeat;
+  }
+}
+.w-50{
+  width: 50%;
+}
 
 .icon-section{
   background: $mainColor!important;
@@ -461,4 +472,7 @@ $grayColor:#cbcbcb;
     background: #c42313;
     color: white!important;
   }
+}
+.lingallery_thumbnails_content{
+  text-align: center!important;
 }
