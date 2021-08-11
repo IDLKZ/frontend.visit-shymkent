@@ -32,6 +32,14 @@
 
         </v-col>
       </v-row>
+
+
+      <v-row>
+
+      </v-row>
+
+
+
       <v-row>
         <v-col md="4">
           <lingallery :iid.sync="currentId" :width="'100%'" :height="400" :items=galleries />
@@ -151,7 +159,17 @@
             </div>
 
           </div>
+          <div class="d-flex">
+            <div class="w-50">
+              <p  class="black--text text-h6 font-weight-bold">
+                Средняя Цена в KZT:
+              </p>
+            </div>
+            <div class="w-50 border-bottom-line">
+              <p class="mt-2">{{event.price}} </p>
+            </div>
 
+          </div>
           <div class="d-flex">
             <div class="w-50">
               <p  class="black--text text-h6 font-weight-bold">
@@ -162,6 +180,27 @@
               <p class="mt-2"><v-icon>fas fa-map-marker-alt</v-icon>  {{event.address}} </p>
             </div>
 
+          </div>
+          <div>
+            <yandex-map :coords="coords"
+                        zoom="10"
+                        style="width: 100%;height: 400px;"
+                        map-type="map"
+            >
+              <div v-for="(item,i) in placemarks">
+                <ymap-marker
+                  :key="i"
+                  :marker-id="i"
+                  marker-type="placemark"
+                  :coords="item"
+                  :hint-content="event['title_'+$i18n.locale]"
+                  :balloon="{header: 'header', body: 'body', footer: 'footer'}"
+                  :icon="{color: 'green', glyph: 'circle'}"
+                  cluster-name="1"
+                ></ymap-marker>
+              </div>
+
+            </yandex-map>
           </div>
         </v-col>
 
@@ -203,48 +242,7 @@ export default {
       event:null,
       currentId:null,
       galleries:[],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-        },
-      ],
+      coords: [42.340782,69.596329],
     }
   },
   async asyncData({$axios,route,redirect,store}) {
@@ -270,8 +268,13 @@ export default {
     galleries.push({
       id:100, src:store.state.image.image +event.image, thumbnail:store.state.image.image +event.image
     })
+    let address = JSON.parse(event.address_link)
+    let placemarks = []
+    address.forEach((item, i) => {
+      placemarks[i] = [item.lat, item.lng];
+    })
 
-    return {event,galleries};
+    return {event,galleries,placemarks};
 
   }
 

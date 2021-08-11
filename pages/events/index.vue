@@ -135,12 +135,13 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" class="text-center">
+        <v-col cols="12" class="text-center" v-if="current_page < last_page">
           <v-btn
             outlined
             rounded
             x-large
             class="text-caption text-none red-button"
+            @click="paginate"
           >
             Загрузить еще....
           </v-btn>
@@ -172,6 +173,9 @@ export default {
           href: 'breadcrumbs_link_2',
         },
       ],
+      current_page:1,
+      last_page: 1,
+      events:[],
     }
   },
   methods:{
@@ -181,18 +185,41 @@ export default {
     },
     truncate(string, value) {
       return string.substring(0, value) + '…';
+    },
+    async paginate(){
+      try{
+        this.current_page +=1;
+        await this.$axios.$get("/all-events?page="+this.current_page).then((e)=>{
+          if(e.data.length){
+            this.events.push(... e.data);
+            this.current_page = e.current_page;
+            this.last_page = e.last_page;
+          }
+        });
+      }
+      catch (e) {
+        console.log(e);
+      }
     }
 
   },
   async asyncData({$axios}) {
     let events = [];
+    let current_page = 1;
+    let last_page = 1;
     try{
-      await $axios.$get("/events").then((e)=>{e.length > 0 ? events = e : null});
+      await $axios.$get("/all-events").then((e)=>{
+        if(e.data.length){
+          events = e.data;
+          current_page = e.current_page;
+          last_page = e.last_page;
+        }
+      });
     }
     catch (e) {
       console.log(e);
     }
-    return {events}
+    return {events,current_page,last_page}
   }
 }
 </script>
